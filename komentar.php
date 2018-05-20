@@ -12,7 +12,7 @@
 <body>
 	<div class="container">
 	<?php include("hf/menubar.php"); ?>
-	<?php  if(isset($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] == 1 && $_SESSION['admin'] != 1) {
+	<?php  if(isset($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] == 1 && $_SESSION['user_biasa'] == 1) {
 	 if(isset($_GET['buatKomentari'])) {
 	?>
 	<br><br>
@@ -105,7 +105,7 @@
 	<?php } ?>	
 	</center>
 	<?php 
-		if(isset($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] == 1 && $_SESSION['admin']!=1) {
+		if(isset($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] == 1 && $_SESSION['user_biasa'] == 1) {
 		if(isset($_GET['getAllComentar'])) {
 			$komentar = getAllComentar();
 			if($komentar==NULL) {

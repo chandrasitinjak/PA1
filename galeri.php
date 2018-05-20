@@ -69,7 +69,7 @@
 				</div>
 				<br>							
 				<h3>Ubah deskripsi gambar</h3>
-		<form class="form-horizontal" action="galeri.php?ubahDeskripsi=<?php echo $_GET['editInfoGambar']?>" method="post">
+		<form class="form-horizontal" action="function.php?ubahDeskripsi=<?php echo $_GET['editInfoGambar']?>" method="post">
   		<div class="form-group">
     		<label class="control-label col-sm-4"></label>
     			<div class="col-sm-4">
@@ -100,7 +100,7 @@
 				      <div class="form-group">
 				        <label class="control-label col-sm-4">Deskripsi :</label>
 				          <div class="col-sm-4">
-				              <textarea class="form-control" name="description" rows="5" id="comment"></textarea>
+				              <textarea class="form-control" name="description" rows="5" id="comment" required></textarea>
 				          </div>
 				      </div>				      
 				      <div class="form-group"> 

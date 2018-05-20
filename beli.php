@@ -14,7 +14,7 @@
 		<?php include("hf/menubar.php"); ?>
 		<?php 
 			if(isset($_GET['lihatProduk'])) {
-			if (isset($_SESSION['admin']) && $_SESSION['admin'] != 1) {
+			if (isset($_SESSION['user_biasa']) && $_SESSION['user_biasa'] == 1) {
 				
 		?>
 		<br><br>
@@ -34,16 +34,16 @@
 					</div>
 					<a href="#"><img src="assets/img/produk/<?=$produk['gambar']?>" class="img-thumbnail" alt="avatar" style="height: 300px;width: 500px"></a>
 					<div class="card-body">							
-						<p class="card-title">harga : <?php echo  $produk['harga'] ?></p>
-						<p class="card-title">Jumlah stok : <?php echo  $produk['stok'] ?></p>
+						<p class="card-title"><h5>harga : <?php echo  $produk['harga'] ?></h5></p>
+						<p class="card-title"><h5>Jumlah stok : <?php echo  $produk['stok'] ?></h5></p>
 						<p class="card-title">Deskripsi : <?php echo  $produk['deskripsi_prod'] ?></p>
 						<center>
 							<?php 
-								if (isset($_SESSION['admin']) && $_SESSION['admin'] != 1) { 
+								if (isset($_SESSION['user_biasa']) && $_SESSION['user_biasa'] == 1) { 
 							?>
 							<br>
 							<?php if($produk['stok'] != 0) {?>
-								<a href="beli.php?beliProduct=<?php echo $produk['id_produk']?>"><button class="btn btn-success">Tambah Kekeranjang</button></a>							
+								<a href="beli.php?beliProduct=<?php echo $produk['id_produk']?>"><button class="btn btn-primary">Tambah Kekeranjang</button></a>							
 							<?php } else if($produk['stok'] == 0) { ?>							
 								<a href="#"><button class="btn btn-danger disabled">Tambah Kekeranjang</button></a>						
 							<?php }} ?>
@@ -56,7 +56,7 @@
 
 		<?php if(isset($_GET['beliProduct'])) {
 			$id = $_GET['beliProduct'];
-			if(isset($_SESSION['is_logged_in']) == TRUE && $_SESSION['admin'] != 1) {
+			if(isset($_SESSION['is_logged_in']) == TRUE && $_SESSION['user_biasa'] == 1) {
 
 		?>
 			<?php 

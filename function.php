@@ -12,6 +12,7 @@
 	if(isset($_GET['do_logout'])) {
 		$_SESSION['is_logged_in'] = 0;
 		$_SESSION['admin'] = 0;
+		$_SESSION['user_biasa'] = 0;
 		header("location: index.php");
 	}
 
@@ -86,6 +87,53 @@
 		// $id = $_GET['masukKeranjang'];
 		tambahKeKeranjang($_GET['masukKeranjang']);
 	}
+
+	if(isset($_GET['batalPesan'])) {
+		$id = $_GET['batalPesan'];
+		batalPesan($id);
+	}
+
+	if(isset($_GET['prosesKeranjang'])) {		
+		prosesKeranjang();
+	}
+
+	if(isset($_GET['terimaTrans'])) {
+		updateTransaksi();
+		terimaTrans();
+	}
+
+	if(isset($_GET['tolakTrans'])) {
+		updateTransaksis();
+		tolakTrans();
+	}
+
+	if(isset($_GET['hapusRiwayatTransaksi'])) {
+		$id_transaksi = $_GET['hapusRiwayatTransaksi'];
+		hapusRiwayatTransaksi($id_transaksi);
+	}
+
+	if(isset($_GET['bokingSekarang'])) {
+		bokingSekarang($_GET['bokingSekarang']);
+	}
+
+	if(isset($_GET['terimaRequest'])) {
+		updateInformasiKursi($_GET['terimaRequest']);
+		terimaRequest($_GET['terimaRequest']);
+	}
+
+	if(isset($_GET['tolakRequest'])) {
+		tolakRequest($_GET['tolakRequest']);
+	}
+
+	if(isset($_GET['ubahDeskripsiKursi'])) {
+		$id_meja = $_GET['ubahDeskripsiKursi'];
+		ubahDeskripsiKursi($id_meja);
+	}
+
+	if(isset($_GET['deleteMeja'])) {
+		$id_meja = $_GET['deleteMeja'];
+		deleteMeja($id_meja);
+	}
 ?>
 
 <!-- Fungsi-fungsi -->
@@ -128,7 +176,8 @@
 			$_SESSION['id'] = $id_member;
 			header('location: index.php');
  		}
- 		else if($email == $email_konfirmasi && $pass == $pass_konfirmasi) {		
+ 		else if($email == $email_konfirmasi && $pass == $pass_konfirmasi && $role_konfirmasi == 2) {		
+ 			$_SESSION['user_biasa'] = 1;
 			$_SESSION['is_logged_in'] = 1;
 			$_SESSION['alert'] = 0;
 			$_SESSION['nama'] = $nama_konfirmasi;
@@ -295,10 +344,10 @@
 				$tambah_komentar = mysqli_query($conn,"INSERT INTO t_komentar VALUES('','$id','$isi','$tanggal','')");
 				if($tambah_komentar) {
 					echo "<script>alert('Komentar berhasil dikirim!');</script>";
-					header("Refresh:0 url=komentar.php?");
+					header("Refresh:0 url=komentar.php?getAllComentar");
 				} else {
 					echo "<script>alert('Komentar gagal dikirim!');</script>";
-					header("Refresh:0 url=komentar.php?");
+					header("Refresh:0 url=komentar.php?buatKomentari");
 				}
 
 			}
@@ -536,7 +585,7 @@
 				header("Refresh:0 url=beli.php?beliProduct=$id_produk");			
 			}
 			else if($jumlah < 1) {
-				echo "<script>alert('Tidak mungkin membeli 0!')</script>";
+				echo "<script>alert('Tidak mungkin membeli< 0!')</script>";
 				header("Refresh:0 url=beli.php?beliProduct=$id_produk");				
 			}
 			else {
@@ -579,4 +628,287 @@
 				return false;
 			}
 		}
-?>
+ 
+		function batalPesan($id_item) {
+			global $conn;
+
+			$queri = "DELETE FROM t_items WHERE id_items = '$id_item'";
+			if($conn->query($queri) == TRUE) {
+				echo "<script>alert('Berhasil dibatalkan!')</script>";
+				header("Refresh:0 url=keranjang.php?keranjangSaya=$id_item");						
+			}
+		}
+
+		function prosesKeranjang(){
+		global $conn;
+
+		date_default_timezone_get('Asia/Jakarta');
+
+		$id_member = $_SESSION['id'];
+		$id_cart = $_GET['prosesKeranjang'];
+		$tanggal = date('Y-m-d');
+		// $kodeTransaksi = kodeTransaksi();
+		$status  = "Requested";
+		
+		$confirm = mysqli_query($conn, "INSERT INTO t_transaksi VALUES('', '$tanggal', NOW(), '$id_member', '$status')");
+				
+		$id_trans = mysqli_insert_id($conn);
+
+		if($confirm){
+			$query = mysqli_query($conn, "UPDATE t_items SET status='$status', id_transaksi='$id_trans' WHERE id_transaksi IS NULL AND id_keranjang = '$id_member'") or die(mysqli_error($conn));
+			if($query){
+				$strQ = "SELECT * FROM t_items WHERE id_transaksi='$id_trans'";
+				$resItem = mysqli_query($conn, $strQ);
+				while($item = mysqli_fetch_array($resItem)){
+					$item_id = $item['id_produk'];
+					$item_tot = $item['jumlah'];
+					$strQ = "SELECT * FROM t_produk WHERE id_produk='$item_id'";
+					$resItems = mysqli_query($conn, $strQ);
+					while($items = mysqli_fetch_array($resItems)){
+						$prod_id = $items['id_produk'];
+						$prod_stok = $items['stok'];
+						$new_stok = $prod_stok - $item_tot;
+						decreaseProduct($prod_id, $new_stok);
+					} 
+				}
+
+				echo "<script>alert('Berhasil');</script>";
+				header("Refresh:0 url=keranjang.php?riwayatTransaksi=".$id_member."");
+			}
+		} else {
+			echo "<script>alert('Gagal');</script>";
+			header("Refresh:0 url=cart.php");
+		}
+	}
+	
+		function decreaseProduct($stok_baru,$id_produk) {
+			global $conn;
+
+			$queri = "UPDATE t_produk SET stok = '$stok_baru' WHERE id_produk = '$id_produk'";
+			mysqli_query($conn,$queri);	
+		}
+
+		function getAllCarting(){
+		
+		global $conn;
+		
+		$id_member = $_SESSION['id'];
+
+		$strQ = "SELECT * FROM t_transaksi WHERE id_user='$id_member' ORDER BY tanggal_transaksi DESC, jam DESC";
+		$resItem = mysqli_query($conn, $strQ);
+		return $resItem;
+		}
+
+		function getDetailCart($id_trans){
+		
+		global $conn;
+		
+		$id_member = $_SESSION['id'];
+
+		$strQ = "SELECT * FROM t_items WHERE id_transaksi='$id_trans'";
+		$resItem = mysqli_query($conn, $strQ);
+		return $resItem;
+	}
+
+		function getAllDetailCarting($id_trans){
+		
+		global $conn;
+		
+		$id_member = $_SESSION['id'];
+
+		$strQ = "SELECT * FROM t_transaksi WHERE id_transaksi='$id_trans'";
+		$resItem = mysqli_query($conn, $strQ);
+		return $resItem;
+	}
+
+	function semuaTransaksi() {
+		global $conn;
+
+		$queri = "SELECT * FROM t_transaksi ORDER BY tanggal_transaksi DESC,jam DESC";
+		$hasil = mysqli_query($conn,$queri) or die(mysqli_error($conn));
+		return $hasil;
+	}
+
+	function terimaTrans() {
+		global $conn;
+
+		$id_transaksi = $_GET['terimaTrans'];
+		$status = 'Accepted';
+
+		$queri = mysqli_query($conn,"UPDATE t_items SET status = '$status' WHERE status='Requested' AND id_transaksi = '$id_transaksi'" )or die(mysqli_error($conn));
+
+		if($queri) {
+			$queris = "SELECT * FROM t_items WHERE id_transaksi = '$id_transaksi'";
+			$hasil = mysqli_query($conn,$queris)or die(mysqli_error($conn));
+			while($data = mysqli_fetch_array($hasil)) {
+				$id_produks = $data['id_produk'];
+				$jumlah_pesananan = $data['jumlah'];
+
+				$queriss = "SELECT * FROM t_produk WHERE id_produk = '$id_produks'";
+				$hasils = mysqli_query($conn,$queriss)or die(mysqli_error($conn));
+				while($datas = mysqli_fetch_array($hasils)) {
+					$id_prod = $datas['id_produk'];
+					$stok = $datas['stok'];
+					$stok_baru = $stok - $jumlah_pesananan;
+					updateT_produk($id_prod,$stok_baru);
+				}
+			}
+			echo "<script>alert('Berhasil');</script>";
+			header("Refresh:0 url=transaksi.php?semuaTransaksi");
+		}
+	}
+
+	function updateT_produk($id_prod,$stok_baru) {
+		global $conn;
+
+		$queri = "UPDATE t_produk SET stok='$stok_baru' WHERE id_produk = '$id_prod'";
+		mysqli_query($conn,$queri)or die(mysqli_error($conn));
+	}
+
+	function tolakTrans() {
+		global $conn;
+
+		$id_transaksi = $_GET['tolakTrans'];
+		$status = 'Rejected';
+
+		$queri = mysqli_query($conn,"UPDATE t_items SET status = '$status' WHERE status='Requested' AND id_transaksi = '$id_transaksi'" )or die(mysqli_error($conn));				
+		echo "<script>alert('Berhasil');</script>";
+		header("Refresh:0 url=transaksi.php?semuaTransaksi");
+	}
+	
+
+	function updateTransaksi() {
+		global $conn;
+
+		$id_transaksi = $_GET['terimaTrans'];
+		$status = 'Accepted';
+
+		$queri = mysqli_query($conn,"UPDATE t_transaksi SET status = '$status' WHERE id_transaksi ='$id_transaksi'")or die(mysqli_error($conn));	
+	}
+
+	function updateTransaksis() {
+		global $conn;
+		
+		$id_transaksi = $_GET['tolakTrans'];
+		$status = 'Rejected';		
+
+		$queri = mysqli_query($conn,"UPDATE t_transaksi SET status = '$status' WHERE id_transaksi ='$id_transaksi'")or die(mysqli_error($conn));	
+	}
+		
+	function bokingSekarang($id_meja) {
+		global $conn;
+
+		$jumlah_pesananan = $_POST['jumlah'];
+		$keterangan = $_POST['keterangan'];
+		$status = 'requested';
+		$id_user = $_SESSION['id'];
+		$id_meja = $id_meja;
+
+		$konfirmasi = mysqli_query($conn,"INSERT INTO t_bookmeja VALUES('','$id_user','$id_meja',NOW(),'$jumlah_pesananan','$keterangan','$status')")or die(mysqli_error($conn));
+
+		if($konfirmasi) {
+			echo "<script>alert('Berhasil direquest');</script>";
+			header("Refresh:0 url=boking.php?daftarRequest=$id_user");
+		}
+	}
+
+	function terimaRequest($id_book) {
+		global $conn;
+
+		$status = 'Accepted';
+		$id_booking = $id_book;
+
+		
+
+		$queri = "UPDATE t_bookmeja SET status = '$status' WHERE id_book = '$id_booking'";
+		$hasil = mysqli_query($conn,$queri) or die (mysqli_error($conn));
+
+		if($hasil) {
+			echo "<script>alert('Berhasil meng-Accept');</script>";
+			header("Refresh:0 url=transaksi.php?bokingMeja");	
+		}
+	}
+
+	function tolakRequest($id_book) {
+		global $conn;
+
+		$status = 'Rejected';
+		$id_booking = $id_book;
+
+		$queri = "UPDATE t_bookmeja SET status = '$status' WHERE id_book = '$id_booking'";
+		$hasil = mysqli_query($conn,$queri) or die (mysqli_error($conn));
+
+		if($hasil) {
+			echo "<script>alert('Berhasil meng-Rejected');</script>";
+			header("Refresh:0 url=transaksi.php?bokingMeja");	
+		}
+	}
+
+	function updateInformasiKursi($id_book) {
+		global $conn;
+
+		$queri = "SELECT * FROM t_bookmeja WHERE id_book = '$id_book'";
+		$hasil = mysqli_query($conn,$queri) or die(mysqli_error($conn));
+		$data = mysqli_fetch_array($hasil);
+
+		$id_meja = $data['id_meja'];
+		$jumlah_pesananan = $data['jumlah'];
+
+		$queris = "SELECT * FROM t_meja WHERE id_meja = '$id_meja'";
+		$result = mysqli_query($conn,$queris) or die(mysqli_error($conn));
+		$datas = mysqli_fetch_array($result);
+
+		$old_stok = $datas['jumlah_kursi'];
+
+		$new_stok = $old_stok - $jumlah_pesananan;		
+		updateInformasiKursis($id_meja,$new_stok);
+	}
+
+	function updateInformasiKursis($id_meja,$stok_terbaru) {
+		global $conn;
+
+		$queri = "UPDATE t_meja SET jumlah_kursi = '$stok_terbaru' WHERE id_meja = '$id_meja'";
+
+		$hasil = mysqli_query($conn,$queri);
+
+		if($hasil) {
+			echo "<script>alert('Berhasil meng-UpdateInformasi Kursi');</script>";
+		}
+	}
+
+	function ubahDeskripsiKursi($id) {
+		global $conn;
+		
+		$jumlah = $_POST['jumlah_kursi'];
+		$deskripsi = $_POST['deskripsi'];
+		$id_meja = $id;
+
+		$queris = "UPDATE t_meja SET jumlah_kursi = '$jumlah',Deskripsi = '$deskripsi' WHERE id_meja = '$id_meja'";	
+		$hasil = mysqli_query($conn,$queris);
+		
+		if($hasil) {
+			echo "<script>alert('Berhasil');</script>";
+			header("Refresh:0 url=meja.php?semuaMeja");	
+		}
+		else {
+			echo "<script>alert('Gagal');</script>";
+			header("Refresh:0 url=meja.php?semuaMeja");	
+		}
+	}
+
+	function deleteMeja($id_meja) {
+		global $conn;
+
+		$id_mejas = $id_meja;
+
+		$queri = "DELETE FROM t_meja WHERE  id_meja = '$id_mejas'";
+		$hasil = mysqli_query($conn,$queri);
+		if($hasil) {
+			echo "<script>alert('Berhasil');</script>";
+			header("Refresh:0 url=meja.php?semuaMeja");	
+		} else {
+			echo "<script>alert('Gagal dihapus');</script>";
+			header("Refresh:0 url=meja.php?semuaMeja");	
+		}	
+	}
+?> 	

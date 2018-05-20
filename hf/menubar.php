@@ -14,17 +14,12 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" href="galeri.php?crudGaleri">Galeri</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-         Pesan
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Makanan</a>
-          <a class="dropdown-item" href="#">Minuman</a>
-      </li>
+      </li>    
       <li class="nav-item">
         <a class="nav-link" href="produk.php?crudProduk">Kelola Produk</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="meja.php?semuaMeja">Kelola Meja</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="kelola_user.php">Kelola User</a>
@@ -32,6 +27,14 @@
        <li class="nav-item">
         <a class="nav-link" href="komentar.php?allKomentar">Kelola Komentar</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="transaksi.php?semuaTransaksi">Kelola Transaksi</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="transaksi.php?bokingMeja">Kelola Boking Meja</a>
+      </li>
+      
+
   
     </ul>
     <ul class="nav navbar-nav float-md-right">
@@ -65,13 +68,16 @@
       <li class="nav-item">
         <a class="nav-link" href="beli.php?lihatProduk">Pesan</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="meja.php?semuaMeja">Pesan Meja</a>
+      </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
          Keranjang
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">          
           <a class="dropdown-item" href="keranjang.php?keranjangSaya=<?php echo $_SESSION['id'];?>">Keranjang Saya</a>          
-          <a class="dropdown-item" href="#">History Order</a>
+          <a class="dropdown-item" href="keranjang.php?riwayatTransaksi=<?php echo $_SESSION['id']; ?>">History Order</a>
       </li>      
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
