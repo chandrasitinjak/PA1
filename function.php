@@ -10,9 +10,7 @@
 	}
 
 	if(isset($_GET['do_logout'])) {
-		$_SESSION['is_logged_in'] = 0;
-		$_SESSION['admin'] = 0;
-		$_SESSION['user_biasa'] = 0;
+		session_destroy();
 		header("location: index.php");
 	}
 
@@ -134,6 +132,47 @@
 		$id_meja = $_GET['deleteMeja'];
 		deleteMeja($id_meja);
 	}
+
+	if(isset($_GET['buatMejaBarus'])) {
+		mejaBaru();
+	}
+
+	if(isset($_GET['deleteRequestMeja'])) {
+		$id_request = $_GET['deleteRequestMeja'];
+		deleteRequestMeja($id_request);
+	}
+
+	if(isset($_GET['hapusSemuaRequest'])) {
+		hapusSemuaRequest();
+	}
+
+	if(isset($_GET['hapusRiwayatTrans'])) {
+		$id_transaksi = $_GET['hapusRiwayatTrans'];
+		hapusRiwayatTransaksi1($id_transaksi);
+	}
+
+	if(isset($_GET['updateKaryawan1'])) {
+		$id_karyawan = $_GET['updateKaryawan1'];
+		updateKaryawan($id_karyawan);
+	}
+
+	if(isset($_GET['deleteKaryawan'])) {
+		$id_karyawan = $_GET['deleteKaryawan'];
+		deleteKaryawan($id_karyawan);
+	}
+
+	if(isset($_GET['tambahKaryawan1'])) {
+		tambah_karyawan11();
+	}
+
+	if(isset($_GET['deletePemasukan'])) {
+		$id = $_GET['deletePemasukan'];
+		deletePemasukan1($id);
+	}
+
+	if(isset($_GET['hapusAllPemasukan'])) {
+		hapusAllPemasukan1();
+	}
 ?>
 
 <!-- Fungsi-fungsi -->
@@ -171,7 +210,7 @@
 		if($email == $email_konfirmasi && $pass == $pass_konfirmasi && $role_konfirmasi == 1) {
 			$_SESSION['admin'] = 1;
 			$_SESSION['is_logged_in'] = 1;
-			$_SESSION['alert'] = 0;
+			// $_SESSION['alert'] = 0;
 			$_SESSION['nama'] = $nama_konfirmasi;
 			$_SESSION['id'] = $id_member;
 			header('location: index.php');
@@ -186,7 +225,7 @@
  		}
 
  		else {
- 			echo"<script>alert('Email atau password anda salah!');</script>";
+ 			echo"<script>alert('email and password was incorrect');</script>";
  			$_SESSION['is_logged_in'] = 0;
  			header("Refresh:0 url=login.php");
  		}
@@ -217,7 +256,11 @@
 			echo"<script>alert('Berhasil terdaftar!');</script>";
 			header('Refresh:1;url=login.php');						
 	 }
-	}
+
+	 $id_user = mysqli_insert_id($conn);
+	 $querii = "INSERT INTO t_keranjang VALUES('$id_user','$id_user')";
+	 $hasilkan = mysqli_query($conn,$querii);
+}
 
 	function editAkun($id) {
 		global $conn;
@@ -317,8 +360,25 @@
 
 		function deleteUser($id) {
 			global $conn;
-		
-			$queri = "DELETE FROM t_akun WHERE id = '$id'";
+			
+			$id_user = $id;
+
+			$kueri = "DELETE FROM t_bookmeja WHERE id_user = '$id_user'";
+			$hapus = mysqli_query($conn,$kueri)or die(mysqli_error($conn));
+
+			$kueri2 = "DELETE FROM t_items WHERE id_user = '$id_user'";
+			$hapus2 = mysqli_query($conn,$kueri2)or die(mysqli_error($conn));
+
+			$kueri3 = "DELETE FROM t_komentar WHERE id_user = '$id_user'";
+			$hapus3 = mysqli_query($conn,$kueri3)or die(mysqli_error($conn));			
+
+			$kueri4 = "DELETE FROM t_transaksi WHERE id_user = '$id_user'";
+			$hapus4 = mysqli_query($conn,$kueri4)or die(mysqli_error($conn));						
+
+			$kueri5 = "DELETE FROM t_keranjang WHERE id_user = '$id_user'";
+			$hapus5 = mysqli_query($conn,$kueri5)or die(mysqli_error($conn));									
+
+			$queri = "DELETE FROM t_akun WHERE id = '$id_user'";
 			$delete = mysqli_query($conn,$queri);
 			if($conn->query($queri) == TRUE) {
 				echo "<script>alert('Pengguna Telah dihapus!')</script>";
@@ -432,7 +492,7 @@
 			$fileName = $_FILES['picture']['name'];
 
 			$query = "SELECT gambar FROM t_galeri WHERE gambar='$fileName'";	
-			$result = $conn->query($query) or die("Error : ".mysqli_error($link));
+			$result = $conn->query($query) or die("Error : ".mysqli_error($conn));
 
 			while($row = mysqli_fetch_array($result)) {
 			if($row['gambar'] == $fileName) {
@@ -451,7 +511,7 @@
 					echo "<script>alert('Berhasil!')</script>";
 					header("Refresh:0 url=galeri.php?crudGaleri");
 					$query = "INSERT INTO t_galeri VALUES ('','$fileName','$fileDescription')";
-					$conn->query($query) or die("Error : ".mysqli_error($link));		
+					$conn->query($query) or die("Error : ".mysqli_error($conn));		
 				}
 				else {			
 				echo "Sorry !!! There was an error in uploading your file";
@@ -462,8 +522,7 @@
 			else {			
 			echo "<script>alert('File telah ada di di folder,Coba lagi!')</script>";
 			header("Refresh:0 url=galeri.php?createNewImage");
-		}	
-
+			}	
 		}
 
 		function Hapus_gambar($id) {
@@ -504,8 +563,9 @@
 			$stok = $_POST['stok_prod'];
 			$deskripsi = $_POST['deskripsi'];
 			$profile = $nama.'.jpg';
-
+			
 			$filename =$_FILES['picture']['name'];
+			
 			if(isset($filename)) {
 				move_uploaded_file($_FILES['picture']['tmp_name'], 'assets/img/produk/'.$nama.'.jpg');
 				$profile = $nama.'.jpg';
@@ -550,6 +610,10 @@
 
 		function hapusProduk($id_produk) {
 			global $conn;
+			$id_produks = $id_produk;
+
+			$kuer = "DELETE FROM t_rating WHERE id_produk = '$id_produk'";
+			$exa = mysqli_query($conn,$kuer);			
 
 			$queri = "DELETE FROM t_produk WHERE id_produk = '$id_produk'";
 			if($conn->query($queri) == TRUE) {
@@ -575,22 +639,14 @@
 			$data = $hasil->fetch_assoc();
 			$stok_lama = $data['stok'];
 			$harga_produk = $data['harga'];
-
-			if($stok_lama == 0) {
-				echo "<script>alert('Stok sudah habis!!')</script>";
-				header("Refresh:0 url=beli.php?beliProduct=$id_produk");		
-			}
-			else if($jumlah > $stok_lama) {
-				echo "<script>alert('Stok tidak mencukupi!')</script>"; 	
-				header("Refresh:0 url=beli.php?beliProduct=$id_produk");			
-			}
-			else if($jumlah < 1) {
-				echo "<script>alert('Tidak mungkin membeli< 0!')</script>";
+			
+			if($jumlah < 1) {
+				echo "<script>alert('Masukkan Jumlah Yang Mau Dibeli')</script>";
 				header("Refresh:0 url=beli.php?beliProduct=$id_produk");				
 			}
 			else {
 				$total_harga = $jumlah * $harga_produk;
-				$masukKeranjang = mysqli_query($conn, "INSERT INTO t_items VALUES('', '$id_cart', '$id_produks', '$id_user', NULL, '$total_harga',    '$status','$jumlah')");
+				$masukKeranjang = mysqli_query($conn, "INSERT INTO t_items VALUES('', '$id_cart', '$id_produks', '$id_user', NULL, '$total_harga','$status','$jumlah')");
 				if($masukKeranjang) {
 					echo "<script>alert('Berhasil!')</script>";
 					header("Refresh:0 url=keranjang.php?keranjangSaya=$id_user");						
@@ -606,8 +662,12 @@
 			global $conn;
 
 			$id_user = $_SESSION['id'];
+			// $q = "SELECT * FROM t_keranjang WHERE id_user = '$id_user'";
+			// $qq = mysqli_query($conn,$q);		
+			// $id_keranjang = mysqli_fetch_array($qq);
+			// $id_keranjangs = $id_keranjang['id_keranjang'];
 
-			$queri = "SELECT nama_prod, harga, id_keranjang, jumlah, status, total_harga,id_items FROM t_items,t_produk WHERE t_items.id_produk = t_produk.id_produk AND t_items.id_user = '$id_user'";
+			$queri = "SELECT nama_prod, harga, id_keranjang, jumlah, status, total_harga,id_items FROM t_items,t_produk WHERE t_items.id_produk = t_produk.id_produk AND t_items.id_user = '$id_user' AND t_items.status = 'waiting'";
 			$hasil = execQ($queri);
 
 			if(mysqli_num_rows($hasil) != 0) {
@@ -664,12 +724,12 @@
 					$item_tot = $item['jumlah'];
 					$strQ = "SELECT * FROM t_produk WHERE id_produk='$item_id'";
 					$resItems = mysqli_query($conn, $strQ);
-					while($items = mysqli_fetch_array($resItems)){
-						$prod_id = $items['id_produk'];
-						$prod_stok = $items['stok'];
-						$new_stok = $prod_stok - $item_tot;
-						decreaseProduct($prod_id, $new_stok);
-					} 
+					// while($items = mysqli_fetch_array($resItems)){
+					// 	$prod_id = $items['id_produk'];
+					// 	$prod_stok = $items['stok'];
+					// 	$new_stok = $prod_stok - $item_tot;
+					// 	decreaseProduct($prod_id, $new_stok);
+					// } 
 				}
 
 				echo "<script>alert('Berhasil');</script>";
@@ -724,7 +784,7 @@
 	function semuaTransaksi() {
 		global $conn;
 
-		$queri = "SELECT * FROM t_transaksi ORDER BY tanggal_transaksi DESC,jam DESC";
+		$queri = "SELECT * FROM t_transaksi ORDER BY tanggal_transaksi ASC";
 		$hasil = mysqli_query($conn,$queri) or die(mysqli_error($conn));
 		return $hasil;
 	}
@@ -746,12 +806,12 @@
 
 				$queriss = "SELECT * FROM t_produk WHERE id_produk = '$id_produks'";
 				$hasils = mysqli_query($conn,$queriss)or die(mysqli_error($conn));
-				while($datas = mysqli_fetch_array($hasils)) {
-					$id_prod = $datas['id_produk'];
-					$stok = $datas['stok'];
-					$stok_baru = $stok - $jumlah_pesananan;
-					updateT_produk($id_prod,$stok_baru);
-				}
+				// while($datas = mysqli_fetch_array($hasils)) {
+				// 	$id_prod = $datas['id_produk'];
+				// 	$stok = $datas['stok'];
+				// 	$stok_baru = $stok - $jumlah_pesananan;
+				// 	updateT_produk($id_prod,$stok_baru);
+				// }
 			}
 			echo "<script>alert('Berhasil');</script>";
 			header("Refresh:0 url=transaksi.php?semuaTransaksi");
@@ -798,19 +858,96 @@
 	function bokingSekarang($id_meja) {
 		global $conn;
 
-		$jumlah_pesananan = $_POST['jumlah'];
-		$keterangan = $_POST['keterangan'];
-		$status = 'requested';
+		date_default_timezone_set('Asia/Jakarta');  
+
 		$id_user = $_SESSION['id'];
 		$id_meja = $id_meja;
 
-		$konfirmasi = mysqli_query($conn,"INSERT INTO t_bookmeja VALUES('','$id_user','$id_meja',NOW(),'$jumlah_pesananan','$keterangan','$status')")or die(mysqli_error($conn));
+		$batas = $_POST['tgl_booked'];
+		$batas1 = $_POST['tgl_booked1'];
+		
+		$kueri = "SELECT SUM(jumlah) AS jumlah_pesanan FROM t_bookmeja WHERE id_user = '$id_user' AND status = 'requested' AND id_meja = '$id_meja '";
+		$kill = mysqli_query($conn,$kueri)or die(mysqli_error($conn));			
+		while ($row = mysqli_fetch_assoc($kill)) { 
+			$jumlah_pesanKursi =  $row['jumlah_pesanan'];
+		}
+
+		// waktu
+		$batass = date('Y-m-d',strtotime("$batas"));
+		$batass1 = date('Y-m-d',strtotime("$batas1"));
+
+		$sekarang = date('Y-m-d');
+
+		$jam_datang = date('H',strtotime("$batas"));
+		$jam_selesai = date('H',strtotime("$batas1"));
+		$jam_sekarang = date('H');
+
+
+		$jumlah_pesananan = $_POST['jumlah'];
+		$keterangan = $_POST['keterangan'];
+
+		$status = 'requested';
+		$id_user = $_SESSION['id'];
+		$id_meja = $id_meja;
+		
+		$queri = "SELECT jumlah_kursi FROM t_meja WHERE id_meja='$id_meja'";
+		$hasil = mysqli_query($conn,$queri)or die(mysqli_error($conn));
+		$data = mysqli_fetch_assoc($hasil);
+
+		$stok_lama = $data['jumlah_kursi'];
+		// $harga_produk = $data['harga'];
+		if($stok_lama == 0) {
+			echo "<script>alert('Kursi Tidak Tersedia');</script>";
+			header("Refresh:0 url=boking.php?bookingMeja=$id_meja");
+		} else if(($jumlah_pesanKursi + $jumlah_pesananan) > $stok_lama) {
+			echo "<script>alert('Kursi tidak cukup lagi!');</script>";
+			header("Refresh:0 url=boking.php?bookingMeja=$id_meja");
+		}
+		else if($jumlah_pesananan > $stok_lama) {
+			echo "<script>alert('Kursi tidak mencukupi!');</script>";
+			header("Refresh:0 url=boking.php?bookingMeja=$id_meja");	
+		}
+		else if($jumlah_pesananan < 1) {
+			echo "<script>alert('Tidak bisa memesan <=0 Kursi!');</script>";
+			header("Refresh:0 url=boking.php?bookingMeja=$id_meja");			
+		} 
+		else if($batass < $sekarang) {
+			echo "<script>alert('Tidak Bisa Memesan diwaktu kemarin!');</script>";
+			header("Refresh:0 url=boking.php?bookingMeja=$id_meja");			
+		}  
+		else if($batass1 < $sekarang) {
+			echo "<script>alert('Tidak valid!');</script>";
+			header("Refresh:0 url=boking.php?bookingMeja=$id_meja");			
+		} 
+		else if($jam_datang < 10) {
+			echo "<script>alert('Dallas Fried Chicken buka pada pukul 10:00 WIB');</script>";
+			header("Refresh:0 url=boking.php?bookingMeja=$id_meja");			
+		} 
+		else if($jam_datang > 22) {
+			echo "<script>alert('Dallas Fried Chicken sudah Tutup! ');</script>";
+			header("Refresh:0 url=boking.php?bookingMeja=$id_meja");			
+		}
+		else if($jam_datang - $jam_sekarang > 1 || $jam_datang - $jam_sekarang < 0){
+			echo "<script>alert('Jarak waktu Memesan dan datang Maksimal 1 JAM!');</script>";
+			header("Refresh:0 url=boking.php?bookingMeja=$id_meja");			
+		}
+		else if($jam_selesai - $jam_datang > 3 || $jam_selesai - $jam_datang < 0){
+			echo "<script>alert('Jarak waktu datang dan jam_selesai Maksimal 3 JAM!');</script>";
+			header("Refresh:0 url=boking.php?bookingMeja=$id_meja");			
+		}
+		else if($batass != $sekarang || $batass1 != $sekarang){
+			echo "<script>alert('Tidak bisa Memesan dilain Hari!');</script>";
+			header("Refresh:0 url=boking.php?bookingMeja=$id_meja");			
+		}
+		else {
+		$konfirmasi = mysqli_query($conn,"INSERT INTO t_bookmeja VALUES('','$id_user','$id_meja','$batas','$batas1','$jumlah_pesananan','$keterangan','$status')")or die(mysqli_error($conn));
 
 		if($konfirmasi) {
-			echo "<script>alert('Berhasil direquest');</script>";
+			echo "<script>alert('request success');</script>";
 			header("Refresh:0 url=boking.php?daftarRequest=$id_user");
 		}
 	}
+}
 
 	function terimaRequest($id_book) {
 		global $conn;
@@ -911,4 +1048,269 @@
 			header("Refresh:0 url=meja.php?semuaMeja");	
 		}	
 	}
+
+	// function buatMejaBaru() {
+
+	// 	global $conn;
+	// 		$fileExistsFlag = 0; 
+	// 		$fileName = $_FILES['picture']['name'];
+
+	// 		$query = "SELECT gambar FROM t_meja WHERE gambar='$fileName'";	
+	// 		$result = $conn->query($query) or die("Error : ".mysqli_error($link));
+
+	// 		while($row = mysqli_fetch_array($result)) {
+	// 		if($row['gambar'] == $fileName) {
+	// 		$fileExistsFlag = 1;
+	// 			}		
+	// 		}
+
+	// 		if($fileExistsFlag == 0) { 
+	// 			$target = "assets/img/meja/";
+	// 			$fileTarget = $target.$fileName;
+	// 			$tempFileName = $_FILES["picture"]["tmp_name"];
+
+	// 			$jumlah_kursi = $_POST['jumlah_kursi'];
+	// 			$fileDescription = $_POST['deskripsi'];	
+
+	// 			$result = move_uploaded_file($tempFileName,$fileTarget);
+
+	// 			if($result) {
+	// 				echo "<script>alert('Berhasil!')</script>";
+	// 				header("Refresh:0 url=meja.php?semuaMeja");
+	// 				$query = "INSERT INTO t_meja VALUES ('','$jumlah',$fileName','$fileDescription')";
+	// 				$conn->query($query) or die("Error : ".mysqli_error($link));		
+	// 			}
+	// 			else {			
+	// 			echo "Sorry !!! There was an error in uploading your file";
+					
+	// 		}	
+
+	// 		}
+	// 		else {			
+	// 		echo "<script>alert('File telah ada di di folder,Coba lagi!')</script>";
+	// 		header("Refresh:0 url=galeri.php?createNewImage");
+	// 		}	
+	// }
+
+	function mejaBaru() {
+		global $conn;
+
+			$fileExistsFlag = 0; 
+			$fileName = $_FILES['picture']['name'];
+
+			$query = "SELECT gambar FROM t_meja WHERE gambar='$fileName'";	
+			$result = $conn->query($query) or die("Error : ".mysqli_error($link));
+
+			while($row = mysqli_fetch_array($result)) {
+			if($row['gambar'] == $fileName) {
+			$fileExistsFlag = 1;
+				}		
+			}
+
+			if($fileExistsFlag == 0) { 
+				$target = "assets/img/meja/";
+				$fileTarget = $target.$fileName;
+				$tempFileName = $_FILES["picture"]["tmp_name"];
+
+				$jumlah_kursi = $_POST['jumlah_kursi'];
+				$fileDescription = $_POST['deskripsi'];	
+
+				$result = move_uploaded_file($tempFileName,$fileTarget);
+
+				if($result) {
+					echo "<script>alert('Berhasil!')</script>";
+					header("Refresh:0 url=meja.php?semuaMeja");
+					$query = "INSERT INTO t_meja VALUES ('','$jumlah_kursi','$fileName','$fileDescription')";
+					$conn->query($query) or die("Error : ".mysqli_error($conn));		
+				}
+				else {			
+				echo "Sorry !!! There was an error in uploading your file";
+					
+				}	
+			}
+			else {			
+			echo "<script>alert('File telah ada di di folder,Coba lagi!')</script>";
+			header("Refresh:0 url=meja.php?semuaMeja");
+			}	
+	}
+
+	function deleteRequestMeja($id) {
+		global $conn;
+
+		$queri = "DELETE FROM t_bookmeja WHERE id_book = '$id'";
+		$hasil = mysqli_query($conn,$queri);
+
+		if($hasil) {
+			echo "<script>alert('Berhasil Menghapus!')</script>";
+			header("Refresh:0 url=transaksi.php?bokingMeja");
+		}
+	}
+
+	function hapusSemuaRequest() {
+		global $conn;
+
+		$queri = "SELECT id_book FROM t_bookmeja";
+		$hasil = mysqli_query($conn,$queri)or die(mysqli_error($conn));
+		
+		$data = mysqli_num_rows($hasil);
+		if($data == 0) {
+			echo "<script>alert('Data kosong,tidak bisa dihapus!')</script>";
+			header("Refresh:0 url=transaksi.php?bokingMeja");	
+		} else {
+			$kueri = "DELETE FROM t_bookmeja WHERE status = 'Accepted' or status = 'Rejected'";
+			$hasill = mysqli_query($conn,$kueri)or die(mysqli_error($conn));
+			if($hasill) {
+				echo "<script>alert('Berhasil Menghapus semua data!')</script>";
+				header("Refresh:0 url=transaksi.php?bokingMeja");	
+			} else {
+				echo "<script>alert('Gagal Menghapus!')</script>";
+				header("Refresh:0 url=transaksi.php?bokingMeja");	
+			}
+		}
+	}
+
+	function hapusRiwayatTransaksi($id_trans) {
+		global $conn;
+		$id_user = $_SESSION['id'];
+
+		$id_transaksi = $id_trans;
+		$queri = "DELETE FROM t_items WHERE id_transaksi = '$id_transaksi'";
+		$execQ = mysqli_query($conn,$queri)or die(mysqli_error($conn));
+
+		$queri2 = "DELETE FROM t_transaksi WHERE id_transaksi = '$id_transaksi'";
+		$execQ2 = mysqli_query($conn,$queri2)or die(mysqli_error($conn));
+
+		if($execQ2) {
+			echo "<script>alert('Berhasil Menghapus semua data!')</script>";
+			header("Refresh:0 url=keranjang.php?riwayatTransaksi=$id_user");	
+		} else {
+			echo "<script>alert('Gagal Menghapus semua data!')</script>";
+			header("Refresh:0 url=keranjang.php?riwayatTransaksi=$id_user");	
+		}
+	}
+
+	function hapusRiwayatTransaksi1($id) {
+		global $conn;
+
+		$id_trans = $id;
+		$queri = "DELETE FROM t_items WHERE id_transaksi = '$id_trans' AND status = 'Rejected'
+		OR id_transaksi = '$id_trans' AND status = 'Accepted'";
+		$execQ = mysqli_query($conn,$queri);
+
+		$queri2 = "DELETE FROM t_transaksi WHERE id_transaksi = '$id_trans' AND status = 'Rejected'
+		OR id_transaksi = '$id_trans' AND status = 'Accepted'";
+		$execQ2 = mysqli_query($conn,$queri2);
+
+		if($execQ2) {
+			echo "<script>alert('Berhasil Menghapus data!')</script>";
+			header("Refresh:0 url=transaksi.php?semuaTransaksi");		
+		} else {
+			echo "<script>alert('Gagal Menghapus data!')</script>";
+			header("Refresh:0 url=transaksi.php?semuaTransaksi");		
+		}
+	}
+
+	function deleteKaryawan($id) {
+		global $conn;
+
+		$id_karyawan = $id;
+		$kueri = "DELETE FROM t_karyawan WHERE id_karyawan = '$id_karyawan'";
+		$execQ2 = mysqli_query($conn,$kueri)or die(mysqli_error($conn));
+
+		if($execQ2 == TRUE) {
+			echo "<script>alert('Berhasil Menghapus!')</script>";
+			header("Refresh:0 url=kelola_karyawan.php");	
+		} else {
+			echo "<script>alert('Gagal Menghapus!')</script>";
+			header("Refresh:0 url=kelola_karyawan.php");	
+		}
+	}
+
+	 function updateKaryawan($id) {
+	 	global $conn;
+
+	 		$nama = $_POST['nama'];
+			$alamat = $_POST['alamat'];
+			$no_telp = $_POST['no_telp'];			
+			$deskripsi = $_POST['deskripsi'];
+			// $profile = $nama.'.jpg';
+			
+			$filename =$_FILES['picture']['name'];
+			if(isset($filename)) {
+				move_uploaded_file($_FILES['picture']['tmp_name'], 'assets/img/karyawan/'.$nama.'.jpg');
+				$profile = $nama.'.jpg';
+			}
+
+			$queri = mysqli_query($conn,"UPDATE t_karyawan SET nama='$nama',gambar='$profile',alamat='$alamat',no_telp='$no_telp',deskripsi = '$deskripsi' WHERE id_karyawan = '$id'") or die(mysqli_error($conn));
+			if($queri) {
+				echo "<script>alert('berhasil diupdate!')</script>";
+				header("Refresh:0 url=kelola_karyawan.php");	
+			} else {
+				echo "<script>alert('gagal!')</script>";
+				header("Refresh:0 url=kelola_karyawan.php");	
+			}	
+	 }
+
+	function tambah_karyawan11() {
+			global $conn;
+
+			$nama = $_POST['nama1'];
+			$alamat = $_POST['alamat1'];
+			$no_telp = $_POST['no_telp1'];			
+			$deskripsi = $_POST['deskripsi1'];
+			// $profile = $nama.'.jpg';
+			
+			$filename =$_FILES['picture']['name'];
+			if(isset($filename)) {
+				move_uploaded_file($_FILES['picture']['tmp_name'], 'assets/img/karyawan/'.$nama.'.jpg');
+				$profile = $nama.'.jpg';
+			}
+
+			$queri = mysqli_query($conn,"INSERT INTO t_karyawan VALUES ('','$nama','$profile','$alamat','$no_telp','$deskripsi')") or die(mysqli_query($conn));
+			if($queri) {
+				echo "<script>alert('berhasil menambahkan!')</script>";
+				header("Refresh:0 url=kelola_karyawan.php");	
+			} else {
+				echo "<script>alert('gagal!')</script>";
+				header("Refresh:0 url=kelola_karyawan.php");	
+			}	
+	}	
+
+	function deletePemasukan1($id) {
+		global $conn;
+
+		$id_transaksi = $id;
+
+		$kueri = "DELETE FROM t_items WHERE id_transaksi = '$id_transaksi'";
+		$exe = mysqli_query($conn,$kueri) or die(mysqli_error($conn));
+
+		$kueri1 = "DELETE FROM t_transaksi WHERE id_transaksi = '$id_transaksi'";
+		$execQ = mysqli_query($conn,$kueri1);
+		if($execQ == TRUE) {
+			echo "<script>alert('Berhasil Menghapus!')</script>";
+			header("Refresh:0 url=pemasukan.php");	
+		} else {
+			echo "<script>alert('Gagal Menghapus!')</script>";
+			header("Refresh:0 url=pemasukan.php");	
+		}
+	}
+
+	function hapusAllPemasukan1() {
+		global $conn;
+
+		$kueri = "DELETE FROM t_items WHERE status = 'Accepted'";
+		$execQ = mysqli_query($conn,$kueri);
+
+		$kueri2 = "DELETE FROM t_transaksi WHERE status = 'Accepted'";
+		$execQ2 = mysqli_query($conn,$kueri2);
+
+		if($execQ2 ==TRUE ) {
+			echo "<script>alert('Berhasil Menghapus!')</script>";
+			header("Refresh:0 url=pemasukan.php");	
+		} else {
+			echo "<script>alert('Gagal Menghapus!')</script>";
+			header("Refresh:0 url=pemasukan.php");	
+		}
+	}
+
 ?> 	

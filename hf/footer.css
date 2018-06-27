@@ -1,26 +1,24 @@
+/* Footer */
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 section {
-    padding: 0px 0;
+    padding: 5px 0;
 }
 
 section .section-title {
     text-align: center;
     color: #007b5e;
-    margin-bottom: 5px;
+    margin-bottom: 50px;
     text-transform: uppercase;
-}
-#footer {
-    background: #0f7b5e !important;
-}
+}   
 
-#bodyindex {
-    background-color: : #0f7b5e !important;   
+#footer {
+    background: red !important;
 }
 #footer h5{
-	padding-left: ;
-    border-left: solid #eeeeee;
-    padding-bottom: 5px;
-    margin-bottom: 5px;
+	padding-left: 10px;
+    border-left: 3px solid #eeeeee;
+    padding-bottom: 6px;
+    margin-bottom: 20px;
     color:#ffffff;
 }
 #footer a {
@@ -30,7 +28,7 @@ section .section-title {
     -webkit-text-decoration-skip: objects;
 }
 #footer ul.social li{
-	padding: 0px 0;
+	padding: 3px 0;
 }
 #footer ul.social li a i {
     margin-right: 5px;
@@ -51,13 +49,13 @@ section .section-title {
 	color:#eeeeee;
 }
 #footer ul.quick-links li{
-	padding: 1px 0;
+	padding: 3px 0;
 	-webkit-transition: .5s all ease;
 	-moz-transition: .5s all ease;
 	transition: .5s all ease;
 }
 #footer ul.quick-links li:hover{
-	padding: 1px 0;
+	padding: 3px 0;
 	margin-left:5px;
 	font-weight:700;
 }

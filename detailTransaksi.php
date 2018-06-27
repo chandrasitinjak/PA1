@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>Detail Transaksi</title>
+	<link rel="icon" type="image/jpg" href="assets/img/beranda/logo.jpg">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,7 +11,7 @@
 	?>
 </head>
 <body>
-	<div class="container">		
+	<div class="container-fluid">		
 		<?php include("hf/menubar.php"); ?>
 		<?php 
 			if(isset($_GET['detailTransaksi'])) {
@@ -18,11 +19,16 @@
 
 			$items = getDetailCart($id_transaksi);
 		?>
-		<br><br>
+		<br>		
 		<center>
-		<h4>Detail transaksi</h4>
-		<br>
-		<table class="table table-stripped table-bordered table-hover ">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="alert alert-primary">
+				<h1><i class="fa fa-book"> Detail transaksi</i></h1>		
+				</div>
+			</div>
+		</div>				
+		<table class="table table-stripped table-bordered table-hover" style="background-color: #a5a7a9">
 			<tr>
 				<th>Nama produk</th>
 				<th>Harga produk</th>
