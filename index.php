@@ -11,7 +11,7 @@
 	?>
 </head>
 <body> 
-	<div>
+	<div class="container-fluid">
 		<?php include("hf/menubar.php"); ?>    
     <?php  if (isset($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] == 1) { ?>
 		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">

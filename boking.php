@@ -70,7 +70,7 @@
 		        <div class="input-group mb-3" style="width: 400px;">
 					<div class="input-group-prepend" >    				
 					</div>			
-					<textarea class="form-control" aria-label="With textarea" name="keterangan" rows="4" required>Masukkan Keterangan</textarea>
+					<textarea class="form-control" aria-label="With textarea" name="keterangan" rows="4" placeholder = "Masukkan Keterangan"  required></textarea>
 				</div>				      				       
 		        <div class="form-group">
 		          <div class="col-sm-offset-2 col-sm-8">

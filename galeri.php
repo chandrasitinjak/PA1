@@ -11,7 +11,7 @@
 	?>
 </head>
 <body>
-	<div>
+	<div class="container-fluid">
 		<?php include("hf/menubar.php"); ?>
 		<?php if(isset($_GET['crudGaleri'])) { ?>						
 			<br>
@@ -56,7 +56,7 @@
 							<a href="function.php?deleteGambar=<?= $gambars['id_gambar']?>"><button class="btn btn-danger">Hapus</button></a>
 							<?php } else { ?>						
 						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong<?php echo $gambars['id_gambar']; ?>">
-				  			detail
+				  			Detail
 						</button>		
 					<?php } ?>						
 						</center>
@@ -96,16 +96,18 @@
 				$gambar = mysqli_query($conn,$queri);
 				while($gambars = mysqli_fetch_array($gambar)) {
 			?>	
-				<div class="container-fluid" style="background-color: yellow">
+				<div class="container-fluid" style="background-color: white">
+				<br>
 				<div class="row">
 					<div class="col-md-12">
 						<div class="jumbotron jumbotron-fluid" style="margin-bottom: 2px;padding-top: 10px;background-color: #75827b7a;padding-bottom: 20px;">
 						  <div class="container">
-						    <center><h1 class="display-4">Halaman Untuk Edit Info Gambar</h1></center>						    
+						    <center><b><h3 class="display-4" style="color: black">Halaman Untuk Edit Info Gambar</h3></b></center>						    
 						  </div>
 						</div>
 					</div>
 				</div>
+				<br>
 				<div class="row">
 					<div class="col-md-6">
 						<div class="card" style="background-color: #304252">

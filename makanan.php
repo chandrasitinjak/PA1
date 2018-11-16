@@ -12,8 +12,9 @@
 </head>
 <body>
 	<body>
-		<div class="container-fluid">
+		<div class="container-fluid">			
 		<?php include("hf/menubar.php"); ?>
+		<br>
 		<div class="alert alert-success" style="margin-bottom: 10px;">
 		<div class="row">							
 					<div class="col-md-4">
@@ -42,7 +43,7 @@
 			?>	
 
 			<div class="col-md-4">
-				<div class="card" style="background-color: #a5acb3">
+				<div class="card" style="background-color: orange">
 					<div class="card-header">
 						<center><b><p class="card-title"><?php echo  $produk['nama_prod'] ?></p></b></center>										
 					</div>

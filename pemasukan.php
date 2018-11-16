@@ -88,7 +88,8 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="alert alert-danger">
-					<center><h3><i class="fa fa-hand-o-right"> <a href="function.php?hapusAllPemasukan" class="btn btn-danger">Hapus Semua Data</a></i></h1></center>
+					<center><h3><i class="fa fa-hand-o-right"> <a href="function.php?hapusAllPemasukan" class="btn btn-danger">Hapus Semua Data</a></i></h3></center>					
+					<center><h3><i class="fa fa-print"> <a href="cetak2.php" class="btn btn-primary">Print Data</a></i></h3></center>
 				</div>
 			</div>
 		</div>

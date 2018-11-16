@@ -70,23 +70,23 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <span><a class="nav-link" href="index.php"><b>Beranda</b><span class="sr-only">(current)</span></a></span>
+        <span><a class="nav-link" href="index.php"><b style="color : black">Beranda</b><span class="sr-only">(current)</span></a></span>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="galeri.php?crudGaleri"><b>Galeri</b></a>
+        <a class="nav-link" href="galeri.php?crudGaleri"><b style="color: black">Galeri</b></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="beli.php?lihatProduk"><b>Pesan Produk</b></a>
+        <a class="nav-link" href="beli.php?lihatProduk"><b style="color: black">Pesan Produk</b></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="meja.php?semuaMeja"><b>Pesan Meja</b></a>
+        <a class="nav-link" href="meja.php?semuaMeja"><b style="color: black">Pesan Meja</b></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="boking.php?daftarRequest=<?php echo $_SESSION['id']; ?>"><b>Daftar transaksi Booking</b></a>
+        <a class="nav-link" href="boking.php?daftarRequest=<?php echo $_SESSION['id']; ?>"><b style="color: black">Daftar transaksi Booking</b></a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-         <b>Keranjang</b>
+         <b style="color: black">Keranjang</b>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">          
           <a class="dropdown-item" href="keranjang.php?keranjangSaya=<?php echo $_SESSION['id'];?>">Keranjang Saya</a>          
@@ -95,7 +95,7 @@
       </li>      
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-         <b>Komentar</b>
+         <b style="color: black">Komentar</b>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="komentar.php?buatKomentari">Buat Komentar</a>
@@ -103,7 +103,7 @@
         </div>
       </li>
       <li class="nav-item active">
-        <span><a class="nav-link" href="lokasi.php"><b>Tentang</b><span class="sr-only"></span></a></span>
+        <span><a class="nav-link" href="lokasi.php"><b style="color: black">Tentang</b><span class="sr-only"></span></a></span>
       </li>                            
       <!-- <li class="nav-item active">
         <span><a class="nav-link" href="kelola_karyawan.php"><b>Karyawan</b><span class="sr-only"></span></a></span>
@@ -113,7 +113,7 @@
     <!-- righ-side -->
     <ul class="nav navbar-nav float-md-right">
       <li class="dropdown">                        
-      <a href="#" class="nav-linkdropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false" style="color : white"><i class="fa fa-user-circle" aria-hidden="true" style="color : white"></i> <?php echo $_SESSION['nama'] ?>  <i class="fa fa-angle-down" aria-hidden="true" style="color : white"></i>
+      <a href="#" class="nav-linkdropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false" style="color : black"><i class="fa fa-user-circle" aria-hidden="true" style="color : black"></i> <b><?php echo $_SESSION['nama'] ?> </b> <i class="fa fa-angle-down" aria-hidden="true" style="color : black  "></i>
       </a>
         <ul class="dropdown-menu">
             <li>
@@ -124,7 +124,7 @@
 
     &nbsp;&nbsp;&nbsp;&nbsp;
       <li class="nav-item">
-        <a href="index.php?do_logout"> <i class=" fa fa-sign-out" style="color : white"> Keluar </i></a>                 
+        <a href="index.php?do_logout"> <i class=" fa fa-sign-out" style="color : black"><b> Keluar </i></b></a>                 
       </li>
     </ul>
   </div>
@@ -134,7 +134,7 @@
   }
   else {
  ?>    
-  <nav class="navbar navbar-expand-lg navbar-light " id="navbar_menu" style="background-color: red ">
+  <nav class="navbar navbar-expand-lg navbar-light " id="navbar_menu" style="background-color: yellow">
     <a class="navbar-brand" href="index.php" style="background-color: yellow"><img src="assets/img/beranda/logo.jpg" style="height: 35px;width: 100px;"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -142,13 +142,13 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <span><a class="nav-link" href="index.php"><b>Beranda</b><span class="sr-only">(current)</span></a></span>
+        <span><a class="nav-link" href="index.php"><b style="color: black">Beranda</b><span class="sr-only">(current)</span></a></span>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="galeri.php?crudGaleri"><b>Galeri</b></a>
+        <a class="nav-link" href="galeri.php?crudGaleri"><b style="color: black">Galeri</b></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="carabeli.php"><b>Cara beli</b></a>
+        <a class="nav-link" href="carabeli.php"><b style="color: black">Cara beli</b></a>
       </li> 
     </ul>
     <!-- right-side -->
@@ -157,11 +157,11 @@
         <a href="login.php" style="color : white">Login</a>
       </li> -->
       <li class="nav-item">
-        <a href="login.php"> <i class=" fa fa-sign-in" style="color : white"><b> Login</b></i></a>                 
+        <a href="login.php"> <i class=" fa fa-sign-in" style="color : black"><b> Login</b></i></a>                 
       </li>
       &nbsp;&nbsp;&nbsp;&nbsp;  
       <li class="nav-item">
-        <a href="register.php" style="color : white"><i class="fa fa-user-plus"><b> Register</b></i></a>
+        <a href="register.php" style="color : black"><i class="fa fa-user-plus"><b> Register</b></i></a>
       </li>
     </ul>    
   </div>

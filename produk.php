@@ -99,7 +99,7 @@
 					</div>
 					<a href="#"><img src="assets/img/produk/<?=$produk['gambar']?>" class="img-thumbnail" alt="avatar" style="height: 300px;width: 500px;" data-container="body" data-toggle="popover" data-placement="top" data-content="<?php echo $produk['deskripsi_prod']; ?>"></a>
 					<div class="card-body">							
-						<p class="card-title">harga : <?php echo  $produk['harga'] ?></p>
+						<p class="card-title">Harga : <?php echo  $produk['harga'] ?></p>
 						<!-- <p class="card-title">Jumlah stok : <?php //echo  $produk['stok'] ?></p> -->
 						<?php if($produk['stok'] == 0) { ?>
 							<b style="">Status : Tidak Tersedia</b>
@@ -189,7 +189,7 @@
 			          </div>
 				      <div class="form-group"> 
 				        <div class="col-sm-offset-2 col-sm-8">
-				            <button type="submit" class="btn btn-success">save</button>
+				            <button type="submit" class="btn btn-success">Save</button>
 				        </div>
 				      </div>
 				      <br>
@@ -239,12 +239,12 @@
 				  	  </div>				      				     
 				      <div class="form-group">				        
 				          <div class="col-sm-4">
-				                <label class="checkbox-inline"><input type="checkbox" name="kategori" value="1"> makanan</label>&nbsp;
-				                <label class="checkbox-inline"><input type="checkbox" name="kategori" value="2"> minuman</label>
+				                <label class="checkbox-inline"><input type="checkbox" name="kategori" value="1"> Makanan</label>&nbsp;
+				                <label class="checkbox-inline"><input type="checkbox" name="kategori" value="2"> Minuman</label>
 				          </div>
 				      </div>
 				      <div class="form-group">
-				        <label class="control-label col-sm-4">Upload gambar</label>
+				        <label class="control-label col-sm-4">Upload Gambar</label>
 				          <div class="col-sm-4">
 				              <input type="file" class="form-control" name="picture">
 				          </div>

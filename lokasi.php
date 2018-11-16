@@ -53,5 +53,65 @@
 			</div>
 	</div>
 	</div>
+	<div class="col-md-12">
+		<table class="table table-stripped table-bordered table-hover" style="background-color: white">
+			<tr>
+				<th>NO</th>
+				<th>Nama Produk</th>
+				<th>Jumlah Suka</th>
+				<th>Jumlah Tidak Suka</th>
+				<th>Persentasi Suka</th>
+			</tr>
+		
+	</div>
+	<?php  
+		$kueri = "SELECT * FROM t_rating GROUP BY id_produk";
+		$exe = mysqli_query($conn,$kueri);
+		$no = 1;
+		while($hasil = mysqli_fetch_array($exe)) {
+
+			$id_produk = $hasil['id_produk'];
+			$kueri1 = "SELECT * FROM t_produk WHERE id_produk = '$id_produk'";
+			$exe1 = mysqli_query($conn,$kueri1);
+			$has = mysqli_fetch_array($exe1);
+
+			$kueri2 = "SELECT COUNT(id_produk) AS produk FROM t_rating WHERE keterangan LIKE  'suka' AND id_produk = '$id_produk'";
+			$exe2 = mysqli_query($conn,$kueri2);
+			$hasil2 = mysqli_fetch_array($exe2);
+
+			$kueri3 = "SELECT COUNT(id_produk) AS produk FROM t_rating WHERE keterangan LIKE  'tidak suka' AND id_produk = '$id_produk'";
+			$exe3 = mysqli_query($conn,$kueri3);
+			$hasil3 = mysqli_fetch_array($exe3);
+
+			$kueri4 = "SELECT COUNT(id_produk) AS produk FROM t_rating WHERE keterangan LIKE 'suka' AND id_produk = '$id_produk' || keterangan LIKE 'tidak suka' AND id_produk = '$id_produk'"; 
+			$exe4 = mysqli_query($conn,$kueri4);
+			$hasil4 = mysqli_fetch_array($exe4);
+
+			$rata2kan = (($hasil2['produk'] / $hasil4['produk']) * 100);		
+
+			echo "<tr>";
+			echo "<td>";		
+			echo $no;
+			echo "</td>";
+			echo "<td>";
+			echo $has['nama_prod'];
+			echo "</td>";
+			echo "<td>";
+			echo $hasil2['produk'];
+			echo "</td>";
+			echo "<td>";
+			echo $hasil3['produk'];
+			echo "</td>";
+			echo "<td>";
+			echo $rata2kan.'%';
+			echo "</td>";
+			echo "</tr>";
+			$no++;
+		}		
+	?>
+	</table>
+
+
+	
 </body>
 </html>

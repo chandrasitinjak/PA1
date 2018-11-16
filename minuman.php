@@ -41,7 +41,7 @@
 			?>	
 
 			<div class="col-md-4">
-				<div class="card" style="background-color: #ab8618">
+				<div class="card" style="background-color: orange">
 					<div class="card-header">
 						<center><b><p class="card-title"><?php echo  $produk['nama_prod'] ?></p></b></center>										
 					</div>

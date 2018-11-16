@@ -60,7 +60,7 @@
 							?>
 							<br>
 							<?php if($produk['stok'] == 1) {?>
-								<a href="beli.php?beliProduct=<?php echo $produk['id_produk']?>"><button class="btn btn-primary">request</button></a>							
+								<a href="beli.php?beliProduct=<?php echo $produk['id_produk']?>"><button class="btn btn-primary">Request</button></a>							
 							<?php } else if($produk['stok'] == 0) { ?>							
 								<a href="#"><button class="btn btn-danger">Tidak Tersedia</button></a>
 							<?php }} ?>
@@ -117,7 +117,7 @@
 				</div>
 				<div class="form-group"> 
 				    <div class="col-sm-offset-2 col-sm-8">
-				        <button type="submit" class="btn btn-success">request</button>
+				        <button type="submit" class="btn btn-success">Request</button>
 				    </div>
 				</div>
 			</form>

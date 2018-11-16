@@ -21,7 +21,7 @@
 			$data = $hasil->fetch_assoc();
 		?>
 		<center>
-		<div class="alert alert-primary" role="alert" style="background-color: #ffc107e8;width: 1330px;height: 580px;">
+		<div class="alert alert-primary" role="alert" style="background-color: white;width: 1330px;height: 580px;">
   
 			<br>
 			<h3>Profil Saya</h3>
@@ -41,8 +41,8 @@
 			</tr>
 			<tr>
 				<td colspan="3">					
-					<a class="btn btn-success" href="profile.php?editAkun=<?php echo $id ?>">Edit Akun</a>
-					<a class="btn btn-success" href="profile.php?editPass1=<?php echo $id ?>">Edit Password</a>
+					<a class="btn btn-success" style="background-color: blue" href="profile.php?editAkun=<?php echo $id ?>">Edit Akun</a>
+					<a class="btn btn-success" style="background-color: blue" href="profile.php?editPass1=<?php echo $id ?>">Edit Password</a>
 				</td>
 			</tr>			
 		</table>
@@ -50,7 +50,7 @@
 		<?php if(isset($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] == 1) {
 			  if(isset($_SESSION['user_biasa']) && $_SESSION['user_biasa'] == 1) {	
 		?>
-					<a class="btn btn-danger" href="function.php?hapusAkun=<?php echo $id ?>">hapus Akun</a>
+					<a class="btn btn-danger" href="function.php?hapusAkun=<?php echo $id ?>">Hapus Akun</a>
 		<?php }} ?>
 		</div>
 		</div>
@@ -115,10 +115,10 @@
 			if(isset($_GET['editPass1'])) {
 				$id = $_GET['editPass1'];		
 		?>
-  <div class="container-fluid" style="background-color: yellow">
+  <div class="container-fluid" style="background-color: white">
   <center><br>
   <div class="well" style="width: 600px;">	  
-  <form class="form-horizontal" action="profile.php?editPass=<?php echo $id?>" method="post" style="background-color: #898290;">
+  <form class="form-horizontal" action="profile.php?editPass=<?php echo $id?>" method="post" style="background-color: #b9e8dbeb;">
   	<br>
   	  <h1>Ganti Password</h1>
   	  <br>      

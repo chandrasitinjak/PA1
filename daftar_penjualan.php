@@ -75,7 +75,13 @@
 		?>
 	<?php } ?>
 		</table>
-		
+		<div class="row">
+			<div class="col-md-12">
+				<div class="alert alert-primary">
+					<center><h3><a href="cetak3.php" class="btn btn-primary"><i class="fa fa-print"> Cetak</i></a></h3></center>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

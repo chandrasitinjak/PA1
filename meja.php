@@ -85,7 +85,7 @@
 								<a href="#"><button class="btn btn-primary" disabled>Penuh</button></a>							
 								
 							<?php } else { ?>							
-								<a href="boking.php?bookingMeja=<?php echo $gambars['id_meja']; ?>"><button class="btn btn-primary">request</button></a>
+								<a href="boking.php?bookingMeja=<?php echo $gambars['id_meja']; ?>"><button class="btn btn-primary">Request</button></a>
 							<?php }} ?>	
 						</center>
 					</div>					
@@ -142,7 +142,7 @@
 				<br>
   		<div class="form-group"> 
     		<div class="col-sm-offset-2 col-sm-8">
-      			<button type="submit" class="btn btn-primary">ubah</button>
+      			<button type="submit" class="btn btn-primary">Ubah</button>
     		</div>
   		</div>
   		<br>
@@ -192,7 +192,7 @@
 					  <br>				      
 				      <div class="form-group"> 
 				        <div class="col-sm-offset-2 col-sm-8">
-				            <button type="submit" class="btn btn-success">simpan</button>
+				            <button type="submit" class="btn btn-success">Simpan</button>
 				        </div>
 				      </div>
 				      <br><br>

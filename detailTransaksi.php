@@ -28,13 +28,16 @@
 				</div>
 			</div>
 		</div>				
+
+
+
 		<table class="table table-stripped table-bordered table-hover" style="background-color: #a5a7a9">
 			<tr>
 				<th>Nama produk</th>
 				<th>Harga produk</th>
 				<th>Jumlah pesanan</th>
 				<th>Total Harga</th>
-				<th colspan="2">status</th>
+				<th>status</th>
 			</tr>			
 		
 		<?php  
@@ -101,9 +104,17 @@
 			</tr>
 		</table>		
 		</center>
+		<?php  
+			$k = "SELECT status FROM t_items WHERE id_transaksi = '$id_transaksi'";
+			$h = mysqli_query($conn,$k);
+			$hasil = mysqli_fetch_array($h);
 
+			if($hasil['status'] == 'Requested') {
+		?>
 		<a href="keranjang.php?riwayatTransaksi=<?php echo $_SESSION['id']; ?>" class="btn btn-primary">Kembali</a>
-
+		<?php } else { ?>
+		<a href="cetak1.php?id_transaksi=<?php echo $id_transaksi ?>" class="btn btn-primary">Cetak</a>
+		<?php } ?>
 		<?php } ?>
 	</div>
 </body>

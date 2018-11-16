@@ -1312,5 +1312,4 @@
 			header("Refresh:0 url=pemasukan.php");	
 		}
 	}
-
 ?> 	
